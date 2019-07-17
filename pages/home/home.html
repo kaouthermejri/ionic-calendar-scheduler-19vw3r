@@ -1,0 +1,47 @@
+<template #template let-showEventDetail="showEventDetail" let-selectedDate="selectedDate" let-noEventsLabel="noEventsLabel">
+	<ion-list class="event-detail-container" has-bouncing="false" *ngIf="showEventDetail" overflow-scroll="false">
+		<ion-item *ngFor="let event of selectedDate?.events" (click)="eventSelected(event)" text-wrap>
+			<span *ngIf="!event.allDay" class="monthview-eventdetail-timecolumn">
+        {{event.startTime|date: 'HH:mm'}} - {{event.endTime|date: 'HH:mm'}}
+      </span>
+			<span *ngIf="event.allDay" class="monthview-eventdetail-timecolumn">{{allDayLabel}} </span>
+			<span class="event-detail"> : {{event.room.name}} |  {{event.title}} </span>
+		</ion-item>
+		<ion-item *ngIf="selectedDate?.events.length==0">
+			<div class="no-events-label">{{noEventsLabel}}</div>
+		</ion-item>
+	</ion-list>
+</template>
+
+
+
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>{{viewTitle}}</ion-title>
+		<ion-buttons end>
+			<button ion-button [disabled]="isToday" (click)="today()">Today</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+
+<ion-content class="has-header">
+	<ion-row ion-content>
+		<ion-col col-9>
+			<button ion-button small (click)="addEvent()">ADD EVENT</button>
+		</ion-col>
+		<ion-col col-3>
+			<ion-select [(ngModel)]="calendar.mode" style="max-width: 100%">
+				<ion-option (ionSelect)="onOptionSelected($event)" *ngFor="let mode of calendarModes" [value]="mode.key">{{mode.value}}
+				</ion-option>
+			</ion-select>
+		</ion-col>
+	</ion-row>
+	<!-- <p>{{selectedObject | json}}</p>
+        <p>{{eventSource | json}}</p> -->
+	<calendar 
+  [monthviewEventDetailTemplate]="template"
+  [eventSource]="eventSource" [markDisabled]="markDisabled" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate"
+	 (onCurrentDateChanged)="onCurrentDateChanged($event)" (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
+	 (onTimeSelected)="onTimeSelected($event)" step="30">
+	</calendar>
+</ion-content>

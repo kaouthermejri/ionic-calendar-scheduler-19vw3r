@@ -1,0 +1,55 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-buttons start>
+			<button ion-button icon-only (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+		</ion-buttons>
+		<ion-title>Event Details</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-list padding>
+		<ion-item>
+			<ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<ion-textarea placeholder="Notes" [(ngModel)]="event.notes" rows="3"></ion-textarea>
+		</ion-item>
+
+		<ion-item>
+			<ion-label>Start</ion-label>
+			<ion-datetime displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm" [(ngModel)]="event.startTime" [min]="minDate"></ion-datetime>
+		</ion-item>
+
+		<ion-item>
+			<ion-label>End</ion-label>
+			<ion-datetime displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm" [(ngModel)]="event.endTime" [min]="minDate"></ion-datetime>
+		</ion-item>
+
+		<ion-item>
+			<ion-label>Select Room</ion-label>
+			<ion-select>
+				<ion-option (ionSelect)="optionSelected($event)" *ngFor="let room of rooms$ | async" [value]="room">{{room.name}}</ion-option>
+			</ion-select>
+		</ion-item>
+
+
+		<ion-item>
+			<ion-label>Block Day</ion-label>
+			<ion-checkbox [(ngModel)]="event.blockDay" (ionChange)="blockDay($event.value)"></ion-checkbox>
+		</ion-item>
+
+		<ion-item>
+			<ion-label>All Day?</ion-label>
+			<ion-checkbox [(ngModel)]="event.allDay" [disabled]="event.blockDay"></ion-checkbox>
+		</ion-item>
+		<button ion-button block icon-left (click)="save()">
+    <ion-icon name="checkmark"></ion-icon> Add Event
+  </button>
+	</ion-list>
+
+
+</ion-content>
